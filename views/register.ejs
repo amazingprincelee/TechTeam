@@ -1,0 +1,46 @@
+<%- include("partials/header.ejs") %> 
+
+
+
+
+
+  <main class="form-signin w-100 m-auto">
+    <form action="/register" method="post" >
+      <h1 class="h3 mb-3 fw-normal"></h1>
+  
+      <div class="form-floating">
+        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+      </div>
+      <div class="form-floating">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+      </div>
+
+      <div class="form-floating">
+        <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" onkeyup="check();">
+        <p id="message"></p>
+      </div>
+  
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button id="submit-btn" class="w-100 btn btn-lg btn-primary" style="background-color: #938ef6;" type="submit" disabled>Sign Up</button>
+      <a href="/login">Sign in</a>
+    </form>
+  
+
+</div>
+
+
+
+
+<script src="script/script.js"></script>
+
+
+<%- include("partials/footer.ejs") %> 
+
+
+
