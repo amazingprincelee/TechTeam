@@ -5,10 +5,11 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
 const _ = require("lodash");
-const encrypt = require('mongoose-encryption');
-const dotenv = require('dotenv');
+const md5 = require("md5");
 
-console.log(process.env.API_KEY);
+
+
+
 
 
 
@@ -36,7 +37,7 @@ const userSchema = new mongoose.Schema({
 
 
 
-userSchema.plugin(encrypt, { secret: process.env.API_KEY, encryptedFields: ["password"] });
+
 
 const Post = mongoose.model("post", postSchema);
 const User = mongoose.model("user", userSchema);
@@ -113,7 +114,7 @@ app.post("/register", function(req, res){
   const user = new User({
 
     email: req.body.email,
-    password: req.body.password
+    password: md5(req.body.password)
 
   });
 
@@ -136,7 +137,7 @@ app.post("/login", function(req, res){
     console.log(err);
    }else{
     if(foundUser){
-      if(req.body.password === foundUser.password){
+      if(md5(req.body.password) === foundUser.password){
         res.render("compose");
       }
     }else{
