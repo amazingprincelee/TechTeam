@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
 const _ = require("lodash");
-const md5 = require("md5");
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 
 
@@ -109,22 +110,25 @@ app.post("/compose", function(req, res){
 
 app.post("/register", function(req, res){
 
+  bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+    const user = new User({
+
+      email: req.body.email,
+      password: hash
   
+    });
+  
+    user.save(function(err){
+      if(err){
+        console.log(err)
+      }else{
+        res.redirect("login");
+        
+      }
+    });
+});
 
-  const user = new User({
-
-    email: req.body.email,
-    password: md5(req.body.password)
-
-  });
-
-  user.save(function(err){
-    if(err){
-      console.log(err)
-    }else{
-      res.send("Successfully Registered, you can now log into your account");
-    }
-  });
+  
 
 
 });
@@ -137,9 +141,11 @@ app.post("/login", function(req, res){
     console.log(err);
    }else{
     if(foundUser){
-      if(md5(req.body.password) === foundUser.password){
-        res.render("compose");
-      }
+      bcrypt.compare(req.body.password, foundUser.password, function(err, result) {
+        if(result === true){
+          res.render("compose");
+        }
+    });
     }else{
       res.send("User not found");
     }
